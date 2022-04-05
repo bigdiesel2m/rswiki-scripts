@@ -23,19 +23,16 @@ for i in range(len(data_json)):
         # else create a new batch and add the object as the first member
         batches.append({'i': data_json[i]['i'], 'j': data_json[i]['j'], 'list': [data_json[i]]})
 
+# now that we've batched stuff up, it's time to turn those into locline templates
 outlist = []
 for i in range(len(batches)):
-    list_0 = []
-    list_1 = []
-    list_2 = []
-    list_3 = []
+    planelist = [[], [], [], []]
     for j in range(len(batches[i]['list'])):
-        print(batches[i]['list'][j])
-        if batches[i]['list'][j]['plane'] == 0:
-            list_0.append(str(64*batches[i]['list'][j]['i'] + batches[i]['list'][j]['x']) + ',' + str(64*batches[i]['list'][j]['j'] + batches[i]['list'][j]['y']))
-        elif batches[i]['list'][j]['plane'] == 1:
-            list_1.append(str(64*batches[i]['list'][j]['i'] + batches[i]['list'][j]['x']) + ',' + str(64*batches[i]['list'][j]['j'] + batches[i]['list'][j]['y']))
-        elif batches[i]['list'][j]['plane'] == 2:
-            list_2.append(str(64*batches[i]['list'][j]['i'] + batches[i]['list'][j]['x']) + ',' + str(64*batches[i]['list'][j]['j'] + batches[i]['list'][j]['y']))
-        elif batches[i]['list'][j]['plane'] == 3:
-            list_3.append(str(64*batches[i]['list'][j]['i'] + batches[i]['list'][j]['x']) + ',' + str(64*batches[i]['list'][j]['j'] + batches[i]['list'][j]['y']))
+        planelist[batches[i]['list'][j]['plane']].append(str(64*batches[i]['list'][j]['i'] + batches[i]['list'][j]['x']) + ',' + str(64*batches[i]['list'][j]['j'] + batches[i]['list'][j]['y']))
+    for j in range(len(planelist)):
+        if len(planelist[j]) > 0:
+            planelist[j] = '|'.join(planelist[j])
+            outlist.append('{{ObjectLocLine\n|name = Drapes\n|location = ' + str(batches[i]['i']) + ',' + str(batches[i]['j']) + ' - {{FloorNumber|uk=' + str(j) + '}}\n|members = Yes\n|mapID = -1\n|plane = ' + str(j) + '\n|' + planelist[j] + '\n|mtype = pin}}')
+
+with open('batcher/output.txt', 'w') as outfile:
+    outfile.write('\n'.join(outlist))
