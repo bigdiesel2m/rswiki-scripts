@@ -1,4 +1,6 @@
 archive/
 dump/
+cache/
+scrape/
 output.txt
 output.json
