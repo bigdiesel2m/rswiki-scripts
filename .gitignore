@@ -2,6 +2,7 @@ archive/
 dump/
 cache/
 scrape/
+video/
 output.txt
 output.json
 exceptions.txt

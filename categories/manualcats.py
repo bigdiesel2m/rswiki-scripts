@@ -3,7 +3,7 @@ import mwparserfromhell
 import re
 
 # this section gets a big list of manual categories, either by parsing the page contents or loading a pre-existing list
-regenerate = False
+regenerate = True
 outjson = []
 if regenerate:
     with open('scrape/contents_osw.json') as infile:
