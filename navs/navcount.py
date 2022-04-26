@@ -33,7 +33,8 @@ for i in range(len(list_osw)):
     wikicode = mwparserfromhell.parse(list_osw[i]['contents'])
     templates = wikicode.filter_templates()
     for j in range(len(templates)):
-        if('Template:' + templates[j].name.capitalize() in navlist):
+        propname = 'Template:' + templates[j].name[0].upper() + templates[j].name[1:]
+        if(propname in navlist):
             count += 1
     outlist.append(list_osw[i]['title'] + '\t' + str(count))
 
