@@ -14,10 +14,10 @@ if regenerate:
         for j in range(len(mo)):
             catclean = mo[j][11:-2]
             outjson.append(catclean)
-    with open('categories/catlist.json', 'w') as outfile:
+    with open('categories/output.json', 'w') as outfile:
         json.dump(outjson, outfile)
 else:
-    with open('categories/catlist.json') as infile:
+    with open('categories/output.json') as infile:
         outjson = json.load(infile)
 
 # this section takes the list of categoires and compares that to the manual categories, then outputs the data into a txt file
