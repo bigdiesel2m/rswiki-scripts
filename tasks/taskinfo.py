@@ -4,19 +4,22 @@ import matplotlib.pyplot as plt
 with open('tasks/output.json') as infile:
     data = json.load(infile)
 
-master = 'Turael'
+master = 'Krystilia'
+monlist = []
+for mon in data[master]:
+    monlist.append(mon)
+monlist.sort()
 
-for monster in data[master]:
+for monster in monlist:
+    #monster = 'Spiritual Creatures' # USED FOR FINDING SPECIFIC INFO
     x = []
     y = []
     for key in data[master][monster]:
         x.append(int(key))
         y.append(data[master][monster][key])
     
-    # plotting the points 
     plt.bar(x, y)
-    
-    # giving a title to my graph
     plt.title(master + ' - ' + monster)
     
     plt.show()
+    #exit(0) # USED FOR FINDING SPECIFIC INFO
