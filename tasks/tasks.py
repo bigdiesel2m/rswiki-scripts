@@ -5,7 +5,7 @@ import re
 datalist = []
 ignored = []
 
-with open("tasks/data.tsv") as file:
+with open("tasks/data_all.tsv") as file:
     data = csv.reader(file, delimiter="\t")
     for row in data:
         msg = row[0].replace("<br>", " ")

@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 with open('tasks/output.json') as infile:
     data = json.load(infile)
 
-master = 'Krystilia'
+master = 'Nieve'
 monlist = []
 for mon in data[master]:
     monlist.append(mon)
 monlist.sort()
 
 for monster in monlist:
-    #monster = 'Spiritual Creatures' # USED FOR FINDING SPECIFIC INFO
+    monster = 'TzHaar' # USED FOR FINDING SPECIFIC INFO
     x = []
     y = []
     for key in data[master][monster]:
@@ -22,4 +22,4 @@ for monster in monlist:
     plt.title(master + ' - ' + monster)
     
     plt.show()
-    #exit(0) # USED FOR FINDING SPECIFIC INFO
+    exit(0) # USED FOR FINDING SPECIFIC INFO
