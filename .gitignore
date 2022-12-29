@@ -1,7 +1,7 @@
 archive/
 dump/
 cache/
-scrape/
+scrape/*.json
 video/
 output.txt
 output.json
