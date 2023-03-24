@@ -82,15 +82,15 @@ for i in range(len(data_rsc)):
                 newpage['rsc_to_rsw'] = page['title']
 
         if newpage['rsc_to_rsw']: #if we have a rsw toplink
-            newpage['rsc_to_rsw'] = str(newpage['rsc_to_rsw'])
+            newpage['rsc_to_rsw'] = str(newpage['rsc_to_rsw']).replace("_"," ")
             if newpage['rsc_to_rsw'] in dict_rsw: #if the toplink goes to a page on RSW
                 toptemp = toplinktemplate(dict_rsw[newpage['rsc_to_rsw']]) #then get the toplinks for that page on RSW
                 if toptemp:
                     toptemp = toptemp[0]
                     if toptemp.has('os'): #if it has an os param, 
-                        newpage['rsw_to_osw'] = str(toptemp.get("os").value) #take that for os
+                        newpage['rsw_to_osw'] = str(toptemp.get("os").value).replace("_"," ") #take that for os
                     if toptemp.has('rsc'): #if it has an rsc param,
-                        newpage['rsw_to_rsc'] = str(toptemp.get("rsc").value) #take that for rsc
+                        newpage['rsw_to_rsc'] = str(toptemp.get("rsc").value).replace("_"," ") #take that for rsc
                     if toptemp.has('1'): #otherwise, iterate on possible numeric params for os or rsc inputs
                         param1 = toptemp.get("1").value
                         if param1 == 'os':
@@ -130,15 +130,15 @@ for i in range(len(data_rsc)):
             newpage['errors_rsc'].append('Missing RSW Link')
 
         if newpage['rsc_to_osw']: #if we have a osw toplink
-            newpage['rsc_to_osw'] = str(newpage['rsc_to_osw'])
+            newpage['rsc_to_osw'] = str(newpage['rsc_to_osw']).replace("_"," ")
             if newpage['rsc_to_osw'] in dict_osw: #if the toplink goes to a page on OSW
                 toptemp = toplinktemplate(dict_osw[newpage['rsc_to_osw']]) #then get the toplinks for that page on OSW
                 if toptemp:
                     toptemp = toptemp[0]
                     if toptemp.has('rs'): #if it has an rs param, 
-                        newpage['osw_to_rsw'] = str(toptemp.get("rs").value) #take that for os
+                        newpage['osw_to_rsw'] = str(toptemp.get("rs").value).replace("_"," ") #take that for os
                     if toptemp.has('rsc'): #if it has an rsc param,
-                        newpage['osw_to_rsc'] = str(toptemp.get("rsc").value) #take that for rsc
+                        newpage['osw_to_rsc'] = str(toptemp.get("rsc").value).replace("_"," ") #take that for rsc
                     if toptemp.has('1'): #otherwise, iterate on possible numeric params for os or rsc inputs
                         param1 = toptemp.get("1").value
                         if param1 == 'rs':
