@@ -6,3 +6,6 @@ video/
 output.txt
 output.json
 exceptions.txt
+april/
+toplinks/*.json
+toplinks/*.txt
