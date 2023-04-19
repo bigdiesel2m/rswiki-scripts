@@ -9,3 +9,5 @@ exceptions.txt
 april/
 toplinks/*.json
 toplinks/*.txt
+__pycache__
+login.py
