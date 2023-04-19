@@ -1,10 +1,9 @@
-import sys
-import requests
 import json
-import math
-import mwparserfromhell
+import login
 
 API_URL = "https://oldschool.runescape.wiki/api.php" #we don't need this to change, so might as well set it here
+
+session, token = login.login(API_URL)
 
 biglist = []
 continueval = ""
@@ -15,11 +14,11 @@ while True: #run until we break
         "list": "allpages", #ask for a list of all pages
         "apnamespace": "0",
         "apfilterredir": "nonredirects", #without redirects
-        "aplimit": 50, #max of 500, testing at less right now
+        "aplimit": 500,
         "apcontinue": continueval #starting here
     }
     print('current OSW progress:', len(biglist))
-    response = requests.get(API_URL, params=params) #this next section is just to clean up the output
+    response = session.get(API_URL, params=params) #this next section is just to clean up the output
     pagelist = response.json()
     pageclean = pagelist['query']['allpages']
 
@@ -37,7 +36,7 @@ while True: #run until we break
         "pageids": listclean,
     }
 
-    response = requests.get(API_URL, params=params) #here we ask for all the info on those pageids
+    response = session.get(API_URL, params=params) #here we ask for all the info on those pageids
     revision = response.json()
     revision = revision['query']['pages'] #here's the info
     revlist = list(revision) #and here's the pageids to iterate by
