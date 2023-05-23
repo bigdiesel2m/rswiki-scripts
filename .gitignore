@@ -11,3 +11,5 @@ toplinks/*.json
 toplinks/*.txt
 __pycache__
 login.py
+misc/*.json
+misc/*.txt
