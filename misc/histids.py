@@ -30,7 +30,7 @@ for i in range(len(data_osw)):
     }
 
     wikitext = mwparserfromhell.parse(page['contents'])
-    infobox = wikitext.filter_templates(matches=lambda t: t.name.matches('Infobox NPC'))
+    infobox = wikitext.filter_templates(matches=r"\{\{[Ii]nfobox")
     if infobox:
         infobox = infobox[0]
         if infobox.has('id'):
