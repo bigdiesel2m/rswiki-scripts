@@ -1,6 +1,7 @@
 import json
 import mwparserfromhell
 
+# script checks if given id has hist, then cleans and adds to lists
 def histcheck(pagename, version, idparam):
 	if 'hist' in idparam:
 		idparam = idparam.replace('hist','')
@@ -12,11 +13,9 @@ def histcheck(pagename, version, idparam):
 with open('scrape/contents_osw.json') as infile:
 	data_wiki = json.load(infile)
 
-# set up some lists to fill with pagenames to count which ones are easy to handle
 outputlist = []
 idlist = []
 for i in range(len(data_wiki)):
-#for i in range(1000):
 	if i%1000==0:
 		print('current step:',i)
 	page = data_wiki[i]
@@ -30,6 +29,7 @@ for i in range(len(data_wiki)):
 				versioncount = versioncount + 1
 				if not infobox.has('version' + str(versioncount + 1)):
 					break
+			# at this point we have a count of how many versions we have to deal with
 			for j in range(1,versioncount+1):
 				idparam = ''
 				if infobox.has('id'+str(j)):
@@ -39,7 +39,7 @@ for i in range(len(data_wiki)):
 				else:
 					idparam = ''
 				histcheck(page['title'], j, idparam)
-		else:
+		else: # non-version stuff resumes here
 			idparam = ''
 			if infobox.has('id'):
 				idparam = infobox.get('id').value.strip()
