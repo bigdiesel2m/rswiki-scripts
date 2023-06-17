@@ -13,3 +13,5 @@ __pycache__
 login.py
 misc/*.json
 misc/*.txt
+options/*.json
+options/*.txt

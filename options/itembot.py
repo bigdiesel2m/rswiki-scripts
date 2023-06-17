@@ -1,10 +1,14 @@
 import json
 import mwparserfromhell
 import login
+import os
 
 # This func part takes a given id, then gets the corresponding options for that item from the cache
 def idopts(idstr):
-	with open('dump/item_defs/' + idstr + '.json') as infile:
+	filename = 'dump/item_defs/' + idstr + '.json'
+	if not os.path.isfile(filename):
+		return('Error', 'Error', 'None')
+	with open(filename) as infile:
 		data_cache = json.load(infile)
 	alloptions = (data_cache['interfaceOptions'])
 	alloptions = list(filter(lambda item: item is not None, alloptions))
@@ -29,7 +33,7 @@ def optionjoin(optlist):
 		return(', '.join(optlist))
 
 # this func compares a set of values to what's in a given infobox param
-def infocheck(param, valstring):
+def infocheck(infobox, param, valstring):
 	if (infobox.has(param) and valstring == str(infobox.get(param).value.strip())):
 		return(True)
 	elif (valstring == 'None' and not infobox.has(param)):
@@ -37,18 +41,18 @@ def infocheck(param, valstring):
 	else:
 		return(False)
 
-# this function compares the options from the cache to those from the infobox
-def simplecompare(cleanoptions, dropoption, infobox, page):
+# this function compares the options from the cache to those from the infobox, then calls the edit functions to fix any simple ones
+def simplefix(alloptions, cleanoptions, dropoption, infobox, page, wikitext):
 	if dropoption == 'Drop':
-		if (infocheck('destroy', 'Drop') and infocheck('options', cleanoptions)):
+		if (infocheck(infobox, 'destroy', 'Drop') and infocheck(infobox, 'options', cleanoptions)):
 			droplist.append(page['title'])
-			dropedit(cleanoptions, infobox, page)
+			infoedit(alloptions, page, wikitext, 'Drop')
 		else:
 			otherlist.append(page['title'])
 	elif dropoption == 'Destroy':
-		if (infobox.has('destroy') and infocheck('options', cleanoptions)):
+		if (infobox.has('destroy') and infocheck(infobox, 'options', cleanoptions)):
 			destroylist.append(page['title'])
-			return('simpledestroy')
+			infoedit(alloptions, page, wikitext, 'Destroy')
 		else:
 			otherlist.append(page['title'])
 	else:
@@ -57,28 +61,45 @@ def simplecompare(cleanoptions, dropoption, infobox, page):
 API_URL = "https://oldschool.runescape.wiki/api.php"
 session, token = login.login(API_URL)
 
-def edit(page, text): #Cook's edit code
-	r4 = session.post(API_URL, data={
+def edit(page, text, revid): #Cook's edit code
+	data={
 		'format': 'json',
 		'action': 'edit',
 		'assert': 'user',
-		'text': text,
+		'text': str(text),
 		'summary': "infobox options adjustments",
 		'title': page,
-		'token': token,
+		'baserevid': revid,
 		'bot': 1,
-	})
-	print(r4.text)
+		'token': token
+	}
+	session.post(API_URL, data=data)
 
 # This func edits a given page by replacing the options in the options param with the cleanoptions, then deleting the no longer necessary destroy param
-def dropedit(cleanoptions, infobox, page):
-	return
+def infoedit(alloptions, page, wikitext, droptype):
+	# this edits the infobox to remove the destroy param and add the full options list
+	for infobox in wikitext.filter_templates(matches=lambda t: t.name.matches('Infobox Item')):
+		if infobox.has('options'):
+			infobox.add('options', alloptions)
+		else:
+			if infobox.has('wornoptions'):
+				infobox.add('options', alloptions, before='wornoptions')
+			elif infobox.has('wornoptions1'):
+				infobox.add('options', alloptions, before='wornoptions1')
+			elif infobox.has('destroy'):
+				infobox.add('options', alloptions, before='destroy')
+			elif infobox.has('destroy1'):
+				infobox.add('options', alloptions, before='destroy1')
+			elif infobox.has('examine'):
+				infobox.add('options', alloptions, before='examine')
+			elif infobox.has('examine1'):
+				infobox.add('options', alloptions, before='examine1')
+			else:
+				break
+		if droptype == 'Drop':
+			infobox.remove('destroy')
+	#edit(page['title'], wikitext, page['revid'])
 
-# This func edits a given page by replacing the options in the options param with the cleanoptions
-def destroyedit(cleanoptions, infobox, page):
-	return
-
-	
 with open('scrape/contents_osw.json') as infile:
 	data_wiki = json.load(infile)
 
@@ -93,8 +114,8 @@ verdiflist = []
 weirdidlist = []
 otherlist = []
 
-#for i in range(len(data_wiki)):
-for i in range(300):
+for i in range(len(data_wiki)):
+#for i in range(1000):
 	if i%1000==0:
 		print('current step:',i)
 	page = data_wiki[i]
@@ -134,7 +155,7 @@ for i in range(300):
 					idsokay = False
 					break # break if some versions have different options
 			if (idsokay): # at this point, we know that all ids in the infobox are regular and all have the same options
-				simplecompare(cleanoptions, dropoption, infobox, page)
+				simplefix(alloptions, cleanoptions, dropoption, infobox, page, wikitext)
 			continue
 
 		# back to normal infoboxes now
@@ -144,7 +165,7 @@ for i in range(300):
 		
 		[alloptions, cleanoptions, dropoption] = idopts(str(infobox.get('id').value.strip()))
 
-		simplecompare(cleanoptions, dropoption, infobox, page)
+		simplefix(alloptions, cleanoptions, dropoption, infobox, page, wikitext)
 
 # Everything past here is just for ouput checking and counting stuff
 print([len(itemlist), len(multboxlist), len(versionlist), len(verdiflist), len(weirdidlist), len(droplist), len(destroylist), len(otherlist)])
