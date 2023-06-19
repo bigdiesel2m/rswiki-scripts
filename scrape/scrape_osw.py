@@ -31,7 +31,7 @@ while True: #run until we break
     params = {
         "action": "query",
         "prop": "revisions",
-        "rvprop": "content",
+        "rvprop": "content|ids",
         "format": "json", 
         "pageids": listclean,
     }
@@ -45,7 +45,8 @@ while True: #run until we break
         page = revision[revlist[j]] #pull out that page
         tempdict = {
             'title': page['title'],
-            'contents': page['revisions'][0]['*']
+            'contents': page['revisions'][0]['*'],
+            'revid': page['revisions'][0]['revid']
         }
         biglist.append(tempdict)
     
