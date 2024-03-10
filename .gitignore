@@ -15,3 +15,5 @@ misc/*.json
 misc/*.txt
 options/*.json
 options/*.txt
+batcher/*.json
+references/*.json
