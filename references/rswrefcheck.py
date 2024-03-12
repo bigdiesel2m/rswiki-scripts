@@ -5,13 +5,13 @@ import mwparserfromhell
 from collections import defaultdict
 
 
-reftemplist = ["PlainCiteDevBlog","CiteDevBlog","PlainCiteForum","CiteForum","PlainCiteGeneral","CiteGeneral","PlainCiteGodLetter","CiteGodLetter","CiteLore","PlainCiteNews","CiteNews","PlainCiteNPC","CiteNPC","PlainCiteSupport","PlainCitePoll","CitePoll","PlainCitePostbag","CitePostbag","PlainCitePub","CitePub","PlainCiteReddit","CiteReddit","CiteText","PlainCiteTwitter","CiteTwitter","PlainCiteVideo","CiteVideo","PlainCiteDevBlog","CiteDevBlog","CiteDevDiary","PlainCiteDevDiary","PlainCiteDiscord","CiteDiscord","PlainCiteForum","CiteForum","PlainCiteGeneral","CiteGeneral","PlainCiteGodLetter","CiteGodLetter","PlainCiteLore","CiteLore","PlainCiteNews","CiteNews","PlainCiteNPC","CiteNPC","PlainCitePoll","CitePoll","PlainCitePostbag","CitePostbag","PlainCitePub","CitePub","PlainCiteReddit","CiteReddit","PlainCiteSupport","CiteSupport","PlainCiteText","CiteText","PlainCiteTwitter","CiteTwitter","PlainCiteVid"]
+reftemplist = ["PlainCiteDevBlog","CiteDevBlog","CiteDevDiary","PlainCiteDevDiary","PlainCiteDiscord","CiteDiscord","PlainCiteForum","CiteForum","PlainCiteGeneral","CiteGeneral","PlainCiteGodLetter","CiteGodLetter","PlainCiteLore","CiteLore","PlainCiteNews","CiteNews","PlainCiteNPC","CiteNPC","PlainCitePoll","CitePoll","PlainCitePostbag","CitePostbag","PlainCitePub","CitePub","PlainCiteReddit","CiteReddit","PlainCiteSupport","CiteSupport","PlainCiteText","CiteText","PlainCiteTwitter","CiteTwitter","PlainCiteVid"]
 
 reflist = []
 
 regenerate = True
 if regenerate:
-    with open('scrape/contents_osw.json') as infile:
+    with open('scrape/contents_rsw.json') as infile:
         contents_osw = json.load(infile)
     for i in range(len(contents_osw)): # for each page
         if (i % 100 == 0): print(str(i))
@@ -24,9 +24,9 @@ if regenerate:
                     "template" : str(templates[j].name),
 				}
                 if(templates[j].has('url')): # condiditionally fill in the url and archive url params
-                    refdict["url"] = (str(templates[j].get('url').value))
+                    refdict["url"] = (str(templates[j].get('url').value).strip())
                 if(templates[j].has('archiveurl')):
-                    refdict["archiveurl"] = (str(templates[j].get('archiveurl').value))
+                    refdict["archiveurl"] = (str(templates[j].get('archiveurl').value).strip())
                 reflist.append(refdict)
     with open('references/references.json', 'w') as outfile: # dump it to output
         json.dump(reflist, outfile)
