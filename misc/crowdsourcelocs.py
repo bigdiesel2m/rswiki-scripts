@@ -14,7 +14,7 @@ print(linelist[0])
 
 locdict = {}
 
-# group npcs with same id/index/plane into dicts
+# group npcs with same id/plane into dicts
 for line in linelist:
 	splitline = line.split("\t")
 	lineid = splitline[0] + " - " + splitline[1] + " - " + splitline[4]
