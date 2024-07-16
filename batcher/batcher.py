@@ -3,9 +3,9 @@ import json
 import math
 
 # configuration paramaters
-ids = ['29983', '29984', '29985']
-name = 'Lizardman corpse'
-threshold = 0 # threshold for multi-chunk batches; set to 0 for separate chunks
+ids = ['5791']
+name = 'Giant bat'
+threshold = 2 # threshold for multi-chunk batches; set to 0 for separate chunks
 outtype = 'locline' # set to 'locline' for locline output, otherwise outputs standard map
 
 # empty lists for later use
