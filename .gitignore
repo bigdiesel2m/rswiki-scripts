@@ -17,4 +17,5 @@ options/*.json
 options/*.txt
 batcher/*.json
 references/*.json
+pricecompare/*.json
 catloops/

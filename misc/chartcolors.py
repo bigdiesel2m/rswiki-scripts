@@ -37,8 +37,8 @@ if makecolorlist:
     colorlist = []
     for chart in chartlist:
         chart = mwparserfromhell.parse(chart).filter_templates()[0] # this loads the stringified template back in, parses it into wikitext, then gets it read as a template again
-        if chart.has('label') and "pickpocket" in str(chart.get('label').value).lower():
-            # print(str(chart.get('label').value))
+        # if chart.has('label') and "cut chance" in str(chart.get('label').value).lower():
+        if chart.has('label'):
             for i in range(30):
                 colorparam = 'color' + str(i)
                 labelparam = 'label' + str(i)
@@ -59,7 +59,7 @@ if makecolorlist:
     with open('misc/output.txt', 'w') as outfile:
         outfile.write("\n".join(colorcounts))
 
-makelabellist = False
+makelabellist = True
 
 if makelabellist:
     labeldict = {'other': []}
