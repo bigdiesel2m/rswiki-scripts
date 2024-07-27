@@ -17,3 +17,4 @@ options/*.json
 options/*.txt
 batcher/*.json
 references/*.json
+catloops/
