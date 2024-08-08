@@ -18,4 +18,6 @@ options/*.txt
 batcher/*.json
 references/*.json
 pricecompare/*.json
+feedback/*.txt
+feedback/*.json
 catloops/
