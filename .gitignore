@@ -20,4 +20,5 @@ references/*.json
 pricecompare/*.json
 feedback/*.txt
 feedback/*.json
+feedback/*.xml
 catloops/
