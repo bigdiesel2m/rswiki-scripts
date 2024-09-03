@@ -1,4 +1,5 @@
 archive/
+batcher/*.json
 dump/
 cache/
 scrape/*.json
@@ -22,3 +23,5 @@ feedback/*.txt
 feedback/*.json
 feedback/*.xml
 catloops/
+steam/*.json
+steam/images/
