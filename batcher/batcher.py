@@ -1,11 +1,12 @@
-import sys
+## Batching script for roughly grouping objects into different ObjectLocLine templates
+## Input jsons found at https://mejrs.github.io/data_osrs/locations/30188.json and such
+
 import json
-import math
 
 # configuration paramaters
-ids = ['5791']
-name = 'Giant bat'
-threshold = 2 # threshold for multi-chunk batches; set to 0 for separate chunks
+ids = ['52396', '52397']
+name = 'Bank table (Varlamore)'
+threshold = 0 # threshold for multi-chunk batches; set to 0 for separate chunks
 outtype = 'locline' # set to 'locline' for locline output, otherwise outputs standard map
 
 # empty lists for later use
@@ -58,7 +59,7 @@ if threshold > 0:
 
 
 # now that we've batched stuff up, it's time to turn those into locline templates
-outlist = []
+outlist = ["==Locations==","{{ObjectTableHead}}"]
 for i in range(len(batches)):
     planelist = [[], [], [], []]
     for j in range(len(batches[i]['list'])):
@@ -67,10 +68,11 @@ for i in range(len(batches)):
         if len(planelist[j]) > 0:
             planelist[j] = '|'.join(planelist[j])
             if outtype == 'locline':
-                outlist.append('{{ObjectLocLine\n|name = ' + name + '\n|location = ' + str(batches[i]['i']) + ',' + str(batches[i]['j']) + ' - {{FloorNumber|uk=' + str(j) + '}}\n|members = Yes\n|mapID = -1\n|plane = ' + str(j) + '\n|' + planelist[j] + '\n|mtype = pin}}')
+                outlist.append('{{ObjectLocLine\n|name = ' + name + '\n|location = ' + str(batches[i]['i']) + ',' + str(batches[i]['j']) + ' - {{FloorNumber|uk=' + str(j) + '}}\n|members = Yes\n|mapID = -1\n|plane = ' + str(j) + '\n|' + planelist[j] + '\n|mtype = pin\n}}')
             else:
                 outlist.append('{{Map|name = ' + name + '|mapID = -1|plane = ' + str(j) + '|' + planelist[j] + '|mtype = pin}}')
 
+outlist.append("{{ObjectTableBottom}}")
 
 with open('batcher/output.txt', 'w') as outfile:
     outfile.write('\n'.join(outlist))

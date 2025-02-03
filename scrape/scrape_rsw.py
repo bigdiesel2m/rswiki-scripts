@@ -11,46 +11,29 @@ while True: #run until we break
     params = {
         "action": "query",
         "format": "json",
-        "list": "allpages", #ask for a list of all pages
-        "apnamespace": "0",
-        "apfilterredir": "nonredirects", #without redirects
-        "aplimit": 500,
-        "apcontinue": continueval #starting here
+        "generator": "allpages", #ask for a list of all pages
+        "gapnamespace": "0",
+        "gapfilterredir": "nonredirects", #without redirects
+        "gaplimit": 500,
+        "gapcontinue": continueval, #starting here
+        "prop": "revisions",
+        "rvprop": "content|ids",
     }
     print('current RSW progress:', len(biglist))
     response = session.get(API_URL, params=params) #this next section is just to clean up the output
-    pagelist = response.json()
-    pageclean = pagelist['query']['allpages']
+    responsejson = response.json()
+    pages = responsejson['query']['pages']
 
-    listclean = [] #make an empty list
-    for k in range(len(pageclean)):
-        listclean.append(str(pageclean[k]['pageid'])) #and now fill that list with comma separated page ids
-
-    listclean = "|".join(listclean) #Now we have a bunch of bar separated pageids
-
-    params = {
-        "action": "query",
-        "prop": "revisions",
-        "rvprop": "content",
-        "format": "json", 
-        "pageids": listclean,
-    }
-
-    response = session.get(API_URL, params=params) #here we ask for all the info on those pageids
-    revision = response.json()
-    revision = revision['query']['pages'] #here's the info
-    revlist = list(revision) #and here's the pageids to iterate by
-
-    for j in range(len(revlist)): #for as many pages as I grabbed...
-        page = revision[revlist[j]] #pull out that page
+    for page in pages: #for as many pages as I grabbed...
         tempdict = {
-            'title': page['title'],
-            'contents': page['revisions'][0]['*']
+            'title': pages[page]['title'],
+            'contents': pages[page]['revisions'][0]['*'],
+            'revid': pages[page]['revisions'][0]['revid']
         }
         biglist.append(tempdict)
     
-    if 'continue' in pagelist: #if we have a continue section
-        continueval = pagelist['continue']['apcontinue'] #grab the continue and send it on back to the start
+    if 'continue' in responsejson: #if we have a continue section
+        continueval = responsejson['continue']['gapcontinue'] #grab the continue and send it on back to the start
     else: #if no continue section,
         break #stop the while loop
 
