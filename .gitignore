@@ -10,3 +10,5 @@ steam/images/
 *.txt
 *.xml
 *.json
+dragonwilds/*.png
+dragonwilds/*.jpg
