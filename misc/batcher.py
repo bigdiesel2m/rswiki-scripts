@@ -81,5 +81,5 @@ for i in range(len(batches)):
 
 outlist.append("{{ObjectTableBottom}}")
 
-with open('batcher/output.txt', 'w') as outfile:
+with open('misc/output.txt', 'w') as outfile:
 	outfile.write('\n'.join(outlist))
